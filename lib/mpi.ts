@@ -57,6 +57,7 @@ export async function fetchEntireRegisterRows(): Promise<{ rows: Record<string, 
     bom: true,
     relax_column_count: true,
     relax_quotes: true,
+    skip_records_with_error: true,
     trim: true
   }) as Record<string, string>[];
   if (!rows.length) throw new Error("MPI CSV contained no rows");
