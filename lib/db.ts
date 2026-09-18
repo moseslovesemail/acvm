@@ -188,7 +188,7 @@ export async function syncProducts(products: Product[], sourceUrl: string, rowCo
         const summary = `${product.tradeName || product.registrationNumber}: ${Object.keys(diffs).join(", ")} changed`;
         const result = await sql`
           insert into acvm_events (fingerprint, event_type, registration_number, trade_name, registrant, summary, payload)
-          values (${fp}, ${eventType}, ${product.registrationNumber}, ${product.tradeName}, ${product.registrant}, ${summary}, ${sql.json(diffs)})
+          values (${fp}, ${eventType}, ${product.registrationNumber}, ${product.tradeName}, ${product.registrant}, ${summary}, ${sql.json(diffs as any)})
           on conflict (fingerprint) do nothing
           returning id
         `;
