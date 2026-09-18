@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "npm run sync || true; next start -p ${PORT:-3000}",
+    "start": "next start -p ${PORT:-3000}",
     "sync": "tsx scripts/sync.ts",
     "typecheck": "tsc --noEmit"
   },
