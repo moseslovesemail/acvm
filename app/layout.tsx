@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import BrandMark from "@/components/BrandMark";
 
 export const metadata: Metadata = {
   title: "ACVM Signal — Agricultural Product Regulatory Intelligence",
@@ -10,19 +11,27 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en-NZ">
       <body>
-        <header className="container nav">
-          <a className="brand" href="/"><span className="brand-mark" />ACVM Signal</a>
-          <nav className="navlinks">
-            <a href="/#product">Product</a>
-            <a href="/#pricing">Pricing</a>
-            <a href="/products">Products</a>
-            <a href="/dashboard" className="button secondary">Open dashboard</a>
-          </nav>
+        <header className="site-header">
+          <div className="container nav">
+            <a className="brand" href="/"><BrandMark /></a>
+            <nav className="navlinks">
+              <a href="/#product">Intelligence</a>
+              <a href="/products">Products</a>
+              <a href="/#pricing">Plans</a>
+              <a href="/dashboard" className="button nav-button">Open dashboard</a>
+            </nav>
+          </div>
         </header>
         {children}
         <footer className="footer">
-          <div className="container">
-            <strong>ACVM Signal</strong> — independent regulatory intelligence. This work is based on/includes MPI data licensed by Ministry for Primary Industries for re-use under CC BY 4.0. ACVM Signal is not affiliated with or endorsed by MPI. Regulatory information should be checked against the official source before acting.
+          <div className="container footer-grid">
+            <div>
+              <BrandMark compact />
+              <p>Independent New Zealand agricultural product regulatory intelligence.</p>
+            </div>
+            <div className="footer-copy">
+              This work is based on/includes MPI data licensed by Ministry for Primary Industries for re-use under CC BY 4.0. ACVM Signal is not affiliated with or endorsed by MPI. Regulatory information should be checked against the official source before acting.
+            </div>
           </div>
         </footer>
       </body>
