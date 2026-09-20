@@ -2,7 +2,7 @@ import * as cheerio from "cheerio";
 import type { RegulatorySignalInput } from "./db";
 
 const USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36";
-const EPA_SEARCH_URL = "https://www.epa.govt.nz/database-search/hsno-application-register/DatabaseSearchForm/?ApplicationType=Importation+or+manufacture+for+release&DatabaseType=HSNO&SiteDatabaseSearchFilters=33&sort=Date";
+const EPA_PIPELINE_URL = "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/";
 const MPI_CONSULTATIONS_URL = "https://www.mpi.govt.nz/consultations?cat=9";
 
 function clean(value: unknown) {
@@ -79,69 +79,52 @@ async function fetchHtml(url: string) {
   return { html, finalUrl: response.url || url };
 }
 
-function findResultBlock($: cheerio.CheerioAPI, element: any) {
-  let node = $(element);
-  let best = node.parent();
-  for (let i = 0; i < 7; i++) {
-    const text = clean(best.text());
-    if (/Decision notified date:/i.test(text) && text.length >= 40 && text.length <= 2500) return best;
-    const parent = best.parent();
-    if (!parent.length) break;
-    best = parent;
-  }
-  return node.parent();
-}
+export async function fetchEpaHsnoSignals(knownIngredients: string[]): Promise<RegulatorySignalInput[]> {
+  const { html, finalUrl } = await fetchHtml(EPA_PIPELINE_URL);
+  const $ = cheerio.load(html);
+  const table = $("table").filter((_, element) => {
+    const text = clean($(element).text());
+    return /Application number/i.test(text) && /Date lodged/i.test(text) && /Next step/i.test(text) && !/Date decision notified/i.test(text);
+  }).first();
 
-export async function fetchEpaHsnoSignals(knownIngredients: string[], pages = 5): Promise<RegulatorySignalInput[]> {
-  const signals = new Map<string, RegulatorySignalInput>();
+  if (!table.length) throw new Error("EPA Category C pipeline table was not found in the public timeframes page");
 
-  for (let page = 0; page < pages; page++) {
-    const start = page * 10;
-    const url = EPA_SEARCH_URL + "&start=" + start;
-    const { html, finalUrl } = await fetchHtml(url);
-    const $ = cheerio.load(html);
+  const signals: RegulatorySignalInput[] = [];
+  table.find("tr").each((_, row) => {
+    const cells = $(row).find("th,td").map((__, cell) => clean($(cell).text())).get();
+    const appIndex = cells.findIndex((cell) => /^APP\d{6}$/i.test(cell));
+    if (appIndex < 0) return;
 
-    $("a, h3, h4, h5, h6").each((_, element) => {
-      const label = clean($(element).text());
-      if (!/^APP\d{6}$/i.test(label)) return;
+    const applicationId = cells[appIndex].toUpperCase();
+    const shortName = cells[appIndex + 1] || applicationId;
+    const applicant = cells[appIndex + 2] || "";
+    const lodged = cells[appIndex + 3] || "";
+    const status = cells[appIndex + 4] || "";
+    const nextStep = cells[appIndex + 5] || "";
+    const combined = [shortName, applicant, status, nextStep].filter(Boolean).join(" ");
+    const ingredients = extractIngredients(combined, knownIngredients);
 
-      const applicationId = label.toUpperCase();
-      if (signals.has(applicationId)) return;
-
-      const block = findResultBlock($, element);
-      const blockText = clean(block.text());
-      const dateMatch = blockText.match(/Decision notified date:\s*(\d{1,2}\s+[A-Za-z]+\s+20\d{2})/i);
-      const eventDate = isoDate(dateMatch?.[1]);
-      const summary = clean(
-        blockText
-          .replace(new RegExp(applicationId, "ig"), "")
-          .replace(/Decision notified date:\s*\d{1,2}\s+[A-Za-z]+\s+20\d{2}/ig, "")
-      ).slice(0, 1000);
-
-      if (!summary || !eventDate) return;
-
-      const anchor = $(element).is("a") ? $(element) : $(element).find("a").first();
-      const href = anchor.attr("href");
-      const sourceUrl = href
-        ? new URL(href, finalUrl).toString()
-        : EPA_SEARCH_URL + "&Keywords=" + encodeURIComponent(applicationId);
-
-      signals.set(applicationId, {
-        source: "EPA_HSNO",
-        externalId: applicationId,
-        signalType: "EPA_DECISION",
-        title: applicationId,
-        summary,
-        eventDate,
-        sourceUrl,
-        ingredients: extractIngredients(summary, knownIngredients),
-        status: "Decision notified",
-        raw: { applicationId, sourceListUrl: url }
-      });
+    signals.push({
+      source: "EPA_HSNO",
+      externalId: applicationId,
+      signalType: "EPA_PIPELINE",
+      title: shortName,
+      summary: [
+        applicant ? "Applicant: " + applicant + "." : "",
+        status ? "Status: " + status + "." : "",
+        nextStep ? "Next step: " + nextStep + "." : ""
+      ].filter(Boolean).join(" "),
+      eventDate: isoDate(lodged),
+      sourceUrl: finalUrl,
+      ingredients,
+      applicant,
+      status: [status, nextStep].filter(Boolean).join(" · "),
+      raw: { applicationId, shortName, applicant, lodged, status, nextStep, sourceType: "Category C current pipeline" }
     });
-  }
+  });
 
-  return [...signals.values()];
+  if (!signals.length) throw new Error("EPA Category C pipeline table contained no application rows");
+  return signals;
 }
 
 function extractMrlIngredients($: cheerio.CheerioAPI, knownIngredients: string[]) {
@@ -248,9 +231,20 @@ export async function fetchMpiMrlSignals(knownIngredients: string[]): Promise<Re
 }
 
 export async function fetchEarlyWarningSignals(knownIngredients: string[]) {
-  const [epa, mrl] = await Promise.all([
+  const [epaResult, mrlResult] = await Promise.allSettled([
     fetchEpaHsnoSignals(knownIngredients),
     fetchMpiMrlSignals(knownIngredients)
   ]);
+
+  const epa = epaResult.status === "fulfilled" ? epaResult.value : [];
+  const mrl = mrlResult.status === "fulfilled" ? mrlResult.value : [];
+
+  if (epaResult.status === "rejected") {
+    console.warn("[acvm-signal] EPA source unavailable", epaResult.reason instanceof Error ? epaResult.reason.message : String(epaResult.reason));
+  }
+  if (mrlResult.status === "rejected") {
+    console.warn("[acvm-signal] MPI MRL source unavailable", mrlResult.reason instanceof Error ? mrlResult.reason.message : String(mrlResult.reason));
+  }
+
   return { epa, mrl, all: [...epa, ...mrl] };
 }
