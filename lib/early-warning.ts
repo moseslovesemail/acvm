@@ -15,7 +15,18 @@ function unique(values: string[]) {
 
 function isoDate(value: string | null | undefined): string | null {
   if (!value) return null;
-  const match = clean(value).match(/(\d{1,2})\s+([A-Za-z]+)\s+(20\d{2})/);
+  const normalized = clean(value);
+
+  const numeric = normalized.match(/(\d{1,2})[\/-](\d{1,2})[\/-](20\d{2})/);
+  if (numeric) {
+    const day = Number(numeric[1]);
+    const monthNumber = Number(numeric[2]);
+    if (day >= 1 && day <= 31 && monthNumber >= 1 && monthNumber <= 12) {
+      return `${numeric[3]}-${numeric[2].padStart(2,"0")}-${numeric[1].padStart(2,"0")}`;
+    }
+  }
+
+  const match = normalized.match(/(\d{1,2})\s+([A-Za-z]+)\s+(20\d{2})/);
   if (!match) return null;
   const months: Record<string, string> = {
     january:"01", february:"02", march:"03", april:"04", may:"05", june:"06",
@@ -147,6 +158,9 @@ function extractMrlIngredients($: cheerio.CheerioAPI, knownIngredients: string[]
   }
 
   const pageText = clean($("main").text() || $("body").text());
+  const scheduleEntry = pageText.match(/For Schedule [23],?[^.]{0,120}?new entry for\s+(.+?)(?:\s+used as|\s+for which|\.|$)/i);
+  if (scheduleEntry?.[1]) explicit.push(clean(scheduleEntry[1]));
+
   const known = matchKnownIngredients(pageText, knownIngredients);
   return unique([...explicit, ...known])
     .filter((value) => !/^(schedule|submission|proposal|food notice)/i.test(value))
