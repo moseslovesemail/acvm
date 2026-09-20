@@ -142,7 +142,7 @@ function extractMrlIngredients($: cheerio.CheerioAPI, knownIngredients: string[]
 
   if (heading.length) {
     let node = heading.next();
-    while (node.length && !/^h[1-3]$/i.test(node[0]?.tagName ?? "")) {
+    while (node.length && !node.is("h1,h2,h3")) {
       node.find("li").each((_, li) => {
         const text = clean($(li).text()).replace(/[.;]$/, "");
         if (text && text.length <= 100) explicit.push(text);
