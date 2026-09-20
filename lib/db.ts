@@ -3,14 +3,14 @@ import type { Product } from "./types";
 
 let client: Sql | null = null;
 
-function sqlClient(): Sql | null {
+export function getDb(): Sql | null {
   if (!process.env.DATABASE_URL) return null;
-  if (!client) client = postgres(process.env.DATABASE_URL, { max: 5 });
+  if (!client) client = postgres(process.env.DATABASE_URL, { max: 8 });
   return client;
 }
 
 export async function ensureSchema() {
-  const sql = sqlClient();
+  const sql = getDb();
   if (!sql) return false;
 
   await sql`
@@ -26,9 +26,15 @@ export async function ensureSchema() {
       raw jsonb not null default '[]'::jsonb,
       first_seen_at timestamptz not null default now(),
       last_seen_at timestamptz not null default now(),
-      updated_at timestamptz not null default now()
+      updated_at timestamptz not null default now(),
+      last_seen_run_id bigint,
+      missing_count integer not null default 0,
+      is_current boolean not null default true
     )
   `;
+  await sql`alter table acvm_products add column if not exists last_seen_run_id bigint`;
+  await sql`alter table acvm_products add column if not exists missing_count integer not null default 0`;
+  await sql`alter table acvm_products add column if not exists is_current boolean not null default true`;
 
   await sql`
     create table if not exists acvm_events (
@@ -58,6 +64,38 @@ export async function ensureSchema() {
     )
   `;
 
+  await sql`
+    create table if not exists acvm_users (
+      id bigserial primary key,
+      email text unique not null,
+      name text not null default '',
+      password_hash text not null,
+      plan text not null default 'preview',
+      subscription_status text not null default 'preview',
+      stripe_customer_id text,
+      stripe_subscription_id text,
+      created_at timestamptz not null default now(),
+      updated_at timestamptz not null default now()
+    )
+  `;
+
+  await sql`
+    create table if not exists acvm_watchlists (
+      id bigserial primary key,
+      user_id bigint not null references acvm_users(id) on delete cascade,
+      entity_type text not null check (entity_type in ('product','registrant','ingredient')),
+      entity_value text not null,
+      label text not null default '',
+      created_at timestamptz not null default now(),
+      last_alerted_at timestamptz not null default now(),
+      unique(user_id, entity_type, entity_value)
+    )
+  `;
+
+  await sql`create index if not exists idx_acvm_events_detected_at on acvm_events(detected_at desc)`;
+  await sql`create index if not exists idx_acvm_events_registrant on acvm_events(registrant)`;
+  await sql`create index if not exists idx_acvm_watchlists_user on acvm_watchlists(user_id)`;
+
   return true;
 }
 
@@ -80,9 +118,9 @@ function fingerprint(eventType: string, registrationNumber: string, payload: unk
 }
 
 export async function syncProducts(products: Product[], sourceUrl: string, rowCount: number) {
-  const sql = sqlClient();
+  const sql = getDb();
   if (!sql) {
-    return { database: false, baseline: true, inserted: products.length, updated: 0, events: 0 };
+    return { database: false, baseline: true, inserted: products.length, updated: 0, events: 0, removals: 0 };
   }
 
   await ensureSchema();
@@ -91,12 +129,13 @@ export async function syncProducts(products: Product[], sourceUrl: string, rowCo
   const [run] = await sql`
     insert into acvm_sync_runs (source_url, row_count, product_count)
     values (${sourceUrl}, ${rowCount}, ${products.length})
-    returning id
+    returning id, started_at
   `;
 
   let inserted = 0;
   let updated = 0;
   let events = 0;
+  let removals = 0;
 
   try {
     for (const product of products) {
@@ -108,11 +147,12 @@ export async function syncProducts(products: Product[], sourceUrl: string, rowCo
         await sql`
           insert into acvm_products (
             registration_number, trade_name, registrant, status, product_types,
-            active_ingredients, registration_date, nz_agent, raw
+            active_ingredients, registration_date, nz_agent, raw, last_seen_run_id,
+            missing_count, is_current
           ) values (
             ${product.registrationNumber}, ${product.tradeName}, ${product.registrant}, ${product.status},
             ${sql.json(sorted(product.productTypes))}, ${sql.json(sorted(product.activeIngredients))},
-            ${product.registrationDate}, ${product.nzAgent}, ${sql.json(product.raw)}
+            ${product.registrationDate}, ${product.nzAgent}, ${sql.json(product.raw)}, ${run.id}, 0, true
           )
         `;
         inserted++;
@@ -136,6 +176,7 @@ export async function syncProducts(products: Product[], sourceUrl: string, rowCo
         continue;
       }
 
+      const wasMissing = Number(existing.missing_count ?? 0) >= 2 || existing.is_current === false;
       const before = {
         tradeName: existing.trade_name,
         registrant: existing.registrant,
@@ -171,19 +212,37 @@ export async function syncProducts(products: Product[], sourceUrl: string, rowCo
           nz_agent = ${product.nzAgent},
           raw = ${sql.json(product.raw)},
           last_seen_at = now(),
+          last_seen_run_id = ${run.id},
+          missing_count = 0,
+          is_current = true,
           updated_at = now()
         where registration_number = ${product.registrationNumber}
       `;
 
+      if (wasMissing && !baseline) {
+        const payload = { sourceUrl, note: "Product returned after two or more missing snapshots" };
+        const fp = fingerprint("RETURNED_TO_REGISTER", product.registrationNumber, payload);
+        const result = await sql`
+          insert into acvm_events (fingerprint, event_type, registration_number, trade_name, registrant, summary, payload)
+          values (${fp}, 'RETURNED_TO_REGISTER', ${product.registrationNumber}, ${product.tradeName}, ${product.registrant},
+                  ${`${product.tradeName || product.registrationNumber} returned to the current register`}, ${sql.json(payload)})
+          on conflict (fingerprint) do nothing returning id
+        `;
+        if (result.length) events++;
+      }
+
       if (Object.keys(diffs).length) {
         updated++;
-        const eventType = diffs.status
-          ? "STATUS_CHANGE"
-          : diffs.registrant
-            ? "REGISTRANT_CHANGE"
-            : diffs.activeIngredients
-              ? "INGREDIENT_CHANGE"
-              : "PRODUCT_CHANGE";
+        const nextStatus = String(after.status ?? "").toLowerCase();
+        const eventType = diffs.status && nextStatus.includes("cancel")
+          ? "CANCELLED"
+          : diffs.status
+            ? "STATUS_CHANGE"
+            : diffs.registrant
+              ? "REGISTRANT_CHANGE"
+              : diffs.activeIngredients
+                ? "INGREDIENT_CHANGE"
+                : "PRODUCT_CHANGE";
         const fp = fingerprint(eventType, product.registrationNumber, diffs);
         const summary = `${product.tradeName || product.registrationNumber}: ${Object.keys(diffs).join(", ")} changed`;
         const result = await sql`
@@ -196,13 +255,53 @@ export async function syncProducts(products: Product[], sourceUrl: string, rowCo
       }
     }
 
+    if (!baseline) {
+      const missing = await sql`
+        select registration_number, trade_name, registrant, missing_count, is_current
+        from acvm_products
+        where last_seen_run_id is distinct from ${run.id}
+      `;
+
+      for (const product of missing) {
+        const newMissingCount = Number(product.missing_count ?? 0) + 1;
+        await sql`
+          update acvm_products
+          set missing_count = ${newMissingCount},
+              is_current = ${newMissingCount < 2},
+              updated_at = now()
+          where registration_number = ${product.registration_number}
+        `;
+
+        if (newMissingCount === 2) {
+          const payload = {
+            missingSnapshots: 2,
+            sourceUrl,
+            classification: "source_removal",
+            caveat: "Removal from the current source is a monitoring signal and should be checked against MPI cancellation data."
+          };
+          const fp = fingerprint("SOURCE_REMOVAL", product.registration_number, payload);
+          const result = await sql`
+            insert into acvm_events (fingerprint, event_type, registration_number, trade_name, registrant, summary, payload)
+            values (${fp}, 'SOURCE_REMOVAL', ${product.registration_number}, ${product.trade_name}, ${product.registrant},
+                    ${`${product.trade_name || product.registration_number} has been absent from two consecutive register snapshots`},
+                    ${sql.json(payload)})
+            on conflict (fingerprint) do nothing returning id
+          `;
+          if (result.length) {
+            events++;
+            removals++;
+          }
+        }
+      }
+    }
+
     await sql`
       update acvm_sync_runs
       set completed_at = now(), event_count = ${events}, status = 'success'
       where id = ${run.id}
     `;
 
-    return { database: true, baseline, inserted, updated, events };
+    return { database: true, baseline, inserted, updated, events, removals };
   } catch (error) {
     await sql`
       update acvm_sync_runs
@@ -214,14 +313,15 @@ export async function syncProducts(products: Product[], sourceUrl: string, rowCo
 }
 
 export async function getDashboardData() {
-  const sql = sqlClient();
+  const sql = getDb();
   if (!sql) return null;
   await ensureSchema();
   const [stats] = await sql`
     select
-      count(*)::int as products,
-      count(distinct registrant)::int as registrants,
-      count(*) filter (where lower(status) like '%suspend%')::int as suspended
+      count(*) filter (where is_current)::int as products,
+      count(distinct registrant) filter (where is_current)::int as registrants,
+      count(*) filter (where lower(status) like '%suspend%' and is_current)::int as suspended,
+      count(*) filter (where not is_current)::int as removed
     from acvm_products
   `;
   const events = await sql`
@@ -229,7 +329,7 @@ export async function getDashboardData() {
            detected_at::text, summary, payload
     from acvm_events
     order by detected_at desc
-    limit 12
+    limit 20
   `;
   const [lastRun] = await sql`
     select completed_at::text, product_count, event_count, status
@@ -241,17 +341,242 @@ export async function getDashboardData() {
 }
 
 export async function searchProducts(query = "", limit = 100) {
-  const sql = sqlClient();
+  const sql = getDb();
   if (!sql) return [];
   await ensureSchema();
   const q = `%${query}%`;
   return sql`
     select registration_number, trade_name, registrant, status,
-           product_types, active_ingredients, registration_date
+           product_types, active_ingredients, registration_date, is_current
     from acvm_products
-    where ${query === ""} or trade_name ilike ${q} or registrant ilike ${q}
-          or registration_number ilike ${q} or active_ingredients::text ilike ${q}
-    order by registration_date desc nulls last, trade_name asc
+    where (${query === ""} or trade_name ilike ${q} or registrant ilike ${q}
+          or registration_number ilike ${q} or active_ingredients::text ilike ${q})
+    order by is_current desc, registration_date desc nulls last, trade_name asc
+    limit ${limit}
+  `;
+}
+
+export async function getProductProfile(registrationNumber: string) {
+  const sql = getDb();
+  if (!sql) return null;
+  await ensureSchema();
+  const [product] = await sql`
+    select * from acvm_products where registration_number = ${registrationNumber}
+  `;
+  if (!product) return null;
+  const events = await sql`
+    select * from acvm_events
+    where registration_number = ${registrationNumber}
+    order by detected_at desc
+    limit 30
+  `;
+  return { product, events };
+}
+
+export async function getRegistrantProfile(name: string) {
+  const sql = getDb();
+  if (!sql) return null;
+  await ensureSchema();
+  const products = await sql`
+    select registration_number, trade_name, status, product_types, active_ingredients,
+           registration_date, is_current
+    from acvm_products
+    where registrant = ${name}
+    order by is_current desc, registration_date desc nulls last, trade_name asc
+  `;
+  if (!products.length) return null;
+  const ingredients = await sql`
+    select ingredient, count(*)::int as products
+    from (
+      select jsonb_array_elements_text(active_ingredients) ingredient
+      from acvm_products
+      where registrant = ${name} and is_current
+    ) x
+    where ingredient <> ''
+    group by ingredient
+    order by products desc, ingredient asc
+    limit 50
+  `;
+  const events = await sql`
+    select * from acvm_events
+    where registrant = ${name}
+    order by detected_at desc
+    limit 30
+  `;
+  return { name, products, ingredients, events };
+}
+
+export async function getIngredientProfile(name: string) {
+  const sql = getDb();
+  if (!sql) return null;
+  await ensureSchema();
+  const products = await sql`
+    select registration_number, trade_name, registrant, status, product_types,
+           active_ingredients, registration_date, is_current
+    from acvm_products
+    where active_ingredients ? ${name}
+    order by is_current desc, registration_date desc nulls last, trade_name asc
+  `;
+  if (!products.length) return null;
+  const registrants = await sql`
+    select registrant, count(*)::int as products
+    from acvm_products
+    where active_ingredients ? ${name} and is_current
+    group by registrant
+    order by products desc, registrant asc
+  `;
+  const events = await sql`
+    select e.*
+    from acvm_events e
+    join acvm_products p on p.registration_number = e.registration_number
+    where p.active_ingredients ? ${name}
+    order by e.detected_at desc
+    limit 30
+  `;
+  return { name, products, registrants, events };
+}
+
+export async function getCancellationEvents(limit = 100) {
+  const sql = getDb();
+  if (!sql) return [];
+  await ensureSchema();
+  return sql`
+    select id, event_type, registration_number, trade_name, registrant,
+           detected_at::text, summary, payload
+    from acvm_events
+    where event_type in ('CANCELLED','SOURCE_REMOVAL')
+    order by detected_at desc
+    limit ${limit}
+  `;
+}
+
+export async function createUser(email: string, name: string, passwordHash: string) {
+  const sql = getDb();
+  if (!sql) throw new Error("Database is not configured");
+  await ensureSchema();
+  const result = await sql`
+    insert into acvm_users (email, name, password_hash)
+    values (${email.toLowerCase()}, ${name}, ${passwordHash})
+    on conflict (email) do nothing
+    returning id, email, name, plan, subscription_status
+  `;
+  return result[0] ?? null;
+}
+
+export async function getUserByEmail(email: string) {
+  const sql = getDb();
+  if (!sql) return null;
+  await ensureSchema();
+  const [user] = await sql`
+    select * from acvm_users where email = ${email.toLowerCase()}
+  `;
+  return user ?? null;
+}
+
+export async function getUserById(id: number) {
+  const sql = getDb();
+  if (!sql) return null;
+  await ensureSchema();
+  const [user] = await sql`
+    select id, email, name, plan, subscription_status, stripe_customer_id, created_at
+    from acvm_users where id = ${id}
+  `;
+  return user ?? null;
+}
+
+export async function updateUserBilling(args: {
+  userId?: number;
+  email?: string;
+  plan?: string;
+  status?: string;
+  customerId?: string | null;
+  subscriptionId?: string | null;
+}) {
+  const sql = getDb();
+  if (!sql) return null;
+  await ensureSchema();
+  const whereId = args.userId ?? null;
+  const whereEmail = args.email?.toLowerCase() ?? null;
+  const [user] = await sql`
+    update acvm_users set
+      plan = coalesce(${args.plan ?? null}, plan),
+      subscription_status = coalesce(${args.status ?? null}, subscription_status),
+      stripe_customer_id = coalesce(${args.customerId ?? null}, stripe_customer_id),
+      stripe_subscription_id = coalesce(${args.subscriptionId ?? null}, stripe_subscription_id),
+      updated_at = now()
+    where (${whereId}::bigint is not null and id = ${whereId})
+       or (${whereEmail}::text is not null and email = ${whereEmail})
+    returning id, email, name, plan, subscription_status, stripe_customer_id
+  `;
+  return user ?? null;
+}
+
+export function watchlistLimit(plan: string) {
+  if (plan === "pro") return 1000;
+  if (plan === "intelligence") return 15;
+  if (plan === "watch") return 3;
+  return 3;
+}
+
+export async function getWatchlists(userId: number) {
+  const sql = getDb();
+  if (!sql) return [];
+  await ensureSchema();
+  return sql`
+    select * from acvm_watchlists
+    where user_id = ${userId}
+    order by created_at desc
+  `;
+}
+
+export async function addWatchlist(userId: number, entityType: string, entityValue: string, label: string) {
+  const sql = getDb();
+  if (!sql) throw new Error("Database is not configured");
+  await ensureSchema();
+  const [user] = await sql`select plan from acvm_users where id = ${userId}`;
+  if (!user) throw new Error("User not found");
+  const [{ count }] = await sql`select count(*)::int as count from acvm_watchlists where user_id = ${userId}`;
+  if (Number(count) >= watchlistLimit(String(user.plan))) throw new Error("Watchlist limit reached");
+  const result = await sql`
+    insert into acvm_watchlists (user_id, entity_type, entity_value, label)
+    values (${userId}, ${entityType}, ${entityValue}, ${label})
+    on conflict (user_id, entity_type, entity_value) do nothing
+    returning *
+  `;
+  return result[0] ?? null;
+}
+
+export async function removeWatchlist(userId: number, id: number) {
+  const sql = getDb();
+  if (!sql) return false;
+  await ensureSchema();
+  const result = await sql`
+    delete from acvm_watchlists where id = ${id} and user_id = ${userId} returning id
+  `;
+  return Boolean(result.length);
+}
+
+export async function getWatchlistEvents(userId: number, limit = 100) {
+  const sql = getDb();
+  if (!sql) return [];
+  await ensureSchema();
+  return sql`
+    select distinct e.*, w.entity_type, w.entity_value, w.label as watch_label
+    from acvm_watchlists w
+    join acvm_events e on (
+      (w.entity_type = 'product' and e.registration_number = w.entity_value)
+      or (w.entity_type = 'registrant' and e.registrant = w.entity_value)
+      or (
+        w.entity_type = 'ingredient'
+        and exists (
+          select 1 from acvm_products p
+          where p.registration_number = e.registration_number
+            and p.active_ingredients ? w.entity_value
+        )
+      )
+    )
+    where w.user_id = ${userId}
+    order by e.detected_at desc
     limit ${limit}
   `;
 }
