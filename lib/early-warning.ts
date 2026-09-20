@@ -238,13 +238,16 @@ export async function fetchEarlyWarningSignals(knownIngredients: string[]) {
 
   const epa = epaResult.status === "fulfilled" ? epaResult.value : [];
   const mrl = mrlResult.status === "fulfilled" ? mrlResult.value : [];
+  const errors: Record<string, string> = {};
 
   if (epaResult.status === "rejected") {
-    console.warn("[acvm-signal] EPA source unavailable", epaResult.reason instanceof Error ? epaResult.reason.message : String(epaResult.reason));
+    errors.EPA_HSNO = epaResult.reason instanceof Error ? epaResult.reason.message : String(epaResult.reason);
+    console.warn("[acvm-signal] EPA source unavailable", errors.EPA_HSNO);
   }
   if (mrlResult.status === "rejected") {
-    console.warn("[acvm-signal] MPI MRL source unavailable", mrlResult.reason instanceof Error ? mrlResult.reason.message : String(mrlResult.reason));
+    errors.MPI_MRL = mrlResult.reason instanceof Error ? mrlResult.reason.message : String(mrlResult.reason);
+    console.warn("[acvm-signal] MPI MRL source unavailable", errors.MPI_MRL);
   }
 
-  return { epa, mrl, all: [...epa, ...mrl] };
+  return { epa, mrl, all: [...epa, ...mrl], errors };
 }
