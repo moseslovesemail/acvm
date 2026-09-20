@@ -9,22 +9,40 @@ export default async function Products({ searchParams }: { searchParams: Promise
 
   return (
     <main className="container dashboard">
-      <div className="dash-top"><div><div className="eyebrow">Product explorer</div><h2 style={{marginTop:8}}>Search the normalised ACVM register</h2></div></div>
-      <form style={{marginBottom:18}}><input className="search" name="q" defaultValue={q} placeholder="Trade name, registrant, ACVM number or ingredient"/></form>
+      <div className="dash-top">
+        <div>
+          <div className="eyebrow">Product explorer</div>
+          <h2 style={{marginTop:8}}>Search the normalised ACVM register</h2>
+          <p className="lead">Move from a product into its registrant, active ingredients and regulatory history.</p>
+        </div>
+        <a className="button secondary" href="/cancellations">Market exits</a>
+      </div>
+
+      <form className="search-bar">
+        <input className="search" name="q" defaultValue={q} placeholder="Trade name, registrant, ACVM number or ingredient"/>
+        <button className="button signal" type="submit">Search</button>
+      </form>
+
       <div className="table-wrap">
         <table>
           <thead><tr><th>Registration</th><th>Trade name</th><th>Registrant</th><th>Type</th><th>Active ingredient</th><th>Status</th></tr></thead>
           <tbody>
             {products.length ? products.map((p: any) => (
               <tr key={p.registration_number}>
-                <td>{p.registration_number}</td>
-                <td><strong>{p.trade_name}</strong></td>
-                <td>{p.registrant}</td>
+                <td><a className="table-link" href={"/products/" + encodeURIComponent(p.registration_number)}>{p.registration_number}</a></td>
+                <td><a className="table-link" href={"/products/" + encodeURIComponent(p.registration_number)}><strong>{p.trade_name}</strong></a></td>
+                <td><a className="table-link" href={"/registrants/" + encodeURIComponent(p.registrant)}>{p.registrant}</a></td>
                 <td>{(p.product_types ?? []).join(", ")}</td>
-                <td>{(p.active_ingredients ?? []).join(", ")}</td>
-                <td>{p.status}</td>
+                <td>
+                  <div className="table-chip-list">
+                    {(p.active_ingredients ?? []).map((ingredient: string) => (
+                      <a className="mini-chip" href={"/ingredients/" + encodeURIComponent(ingredient)} key={ingredient}>{ingredient}</a>
+                    ))}
+                  </div>
+                </td>
+                <td>{p.is_current ? (p.status || "Current") : <span className="badge badge--exit">Not present</span>}</td>
               </tr>
-            )) : <tr><td colSpan={6} className="source-note">No database rows yet. Run the sync worker after Railway Postgres is connected.</td></tr>}
+            )) : <tr><td colSpan={6} className="source-note">No products matched that search.</td></tr>}
           </tbody>
         </table>
       </div>
