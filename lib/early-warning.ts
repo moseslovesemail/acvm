@@ -64,10 +64,19 @@ function extractIngredients(text: string, knownIngredients: string[]) {
 
 async function fetchHtml(url: string) {
   const response = await fetch(url, {
-    headers: { "user-agent": USER_AGENT, accept: "text/html,application/xhtml+xml", "accept-language": "en-NZ,en;q=0.9" },
+    headers: {
+      "user-agent": USER_AGENT,
+      accept: "text/html,application/xhtml+xml",
+      "accept-language": "en-NZ,en;q=0.9"
+    },
     cache: "no-store"
   });
-  if (!response.ok) throw new Error(`${url} returned ${response.status}`);\n  const html = await response.text();\n  if (html.length < 500) throw new Error(`${url} returned an unexpectedly small HTML response (${html.length} bytes)`);\n  return { html, finalUrl: response.url || url };
+  if (!response.ok) throw new Error(`${url} returned ${response.status}`);
+  const html = await response.text();
+  if (html.length < 500) {
+    throw new Error(`${url} returned an unexpectedly small HTML response (${html.length} bytes)`);
+  }
+  return { html, finalUrl: response.url || url };
 }
 
 function findResultBlock($: cheerio.CheerioAPI, element: any) {
