@@ -657,7 +657,7 @@ export async function upsertRegulatorySignals(source: string, signals: Regulator
           ${signal.title}, ${signal.summary}, ${signal.eventDate},
           ${signal.sourceUrl}, ${sql.json(signal.ingredients)},
           ${signal.applicant ?? ""}, ${signal.status ?? ""},
-          ${sql.json(signal.raw ?? {})}
+          ${sql.json((signal.raw ?? {}) as any)}
         )
         on conflict (source, external_id, signal_type) do update set
           title = excluded.title,
