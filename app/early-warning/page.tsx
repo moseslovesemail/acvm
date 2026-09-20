@@ -32,7 +32,7 @@ export default async function EarlyWarning({ searchParams }: { searchParams: Pro
         <div className="stat"><div className="stat-label">Upstream signals</div><div className="stat-value">{stats?.signals ?? "—"}</div></div>
         <div className="stat"><div className="stat-label">EPA HSNO</div><div className="stat-value">{stats?.epa ?? "—"}</div></div>
         <div className="stat"><div className="stat-label">MPI MRL</div><div className="stat-value">{stats?.mrl ?? "—"}</div></div>
-        <div className="stat"><div className="stat-label">Last 90 days</div><div className="stat-value">{stats?.recent ?? "—"}</div></div>
+        <div className="stat"><div className="stat-label">Captured 90d</div><div className="stat-value">{stats?.recent ?? "—"}</div></div>
       </div>
 
       <div className="signal-method">
