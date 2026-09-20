@@ -92,6 +92,42 @@ export async function ensureSchema() {
     )
   `;
 
+  await sql`
+    create table if not exists regulatory_signals (
+      id bigserial primary key,
+      source text not null,
+      external_id text not null,
+      signal_type text not null,
+      title text not null default '',
+      summary text not null default '',
+      event_date date,
+      source_url text not null,
+      ingredients jsonb not null default '[]'::jsonb,
+      applicant text not null default '',
+      status text not null default '',
+      raw jsonb not null default '{}'::jsonb,
+      first_seen_at timestamptz not null default now(),
+      updated_at timestamptz not null default now(),
+      unique(source, external_id, signal_type)
+    )
+  `;
+
+  await sql`
+    create table if not exists regulatory_sync_runs (
+      id bigserial primary key,
+      started_at timestamptz not null default now(),
+      completed_at timestamptz,
+      source text not null,
+      signal_count integer not null default 0,
+      status text not null default 'running',
+      error text
+    )
+  `;
+
+  await sql`create index if not exists idx_regulatory_signals_date on regulatory_signals(event_date desc)`;
+  await sql`create index if not exists idx_regulatory_signals_source on regulatory_signals(source, signal_type)`;
+  await sql`create index if not exists idx_regulatory_signals_ingredients on regulatory_signals using gin(ingredients)`;
+
   await sql`create index if not exists idx_acvm_events_detected_at on acvm_events(detected_at desc)`;
   await sql`create index if not exists idx_acvm_events_registrant on acvm_events(registrant)`;
   await sql`create index if not exists idx_acvm_watchlists_user on acvm_watchlists(user_id)`;
@@ -577,6 +613,192 @@ export async function getWatchlistEvents(userId: number, limit = 100) {
     )
     where w.user_id = ${userId}
     order by e.detected_at desc
+    limit ${limit}
+  `;
+}
+
+
+export type RegulatorySignalInput = {
+  source: "EPA_HSNO" | "MPI_MRL";
+  externalId: string;
+  signalType: string;
+  title: string;
+  summary: string;
+  eventDate: string | null;
+  sourceUrl: string;
+  ingredients: string[];
+  applicant?: string;
+  status?: string;
+  raw?: Record<string, unknown>;
+};
+
+export async function upsertRegulatorySignals(source: string, signals: RegulatorySignalInput[]) {
+  const sql = getDb();
+  if (!sql) return { database: false, inserted: signals.length, updated: 0 };
+  await ensureSchema();
+
+  const [run] = await sql`
+    insert into regulatory_sync_runs (source)
+    values (${source})
+    returning id
+  `;
+
+  let inserted = 0;
+  let updated = 0;
+
+  try {
+    for (const signal of signals) {
+      const result = await sql`
+        insert into regulatory_signals (
+          source, external_id, signal_type, title, summary, event_date,
+          source_url, ingredients, applicant, status, raw
+        ) values (
+          ${signal.source}, ${signal.externalId}, ${signal.signalType},
+          ${signal.title}, ${signal.summary}, ${signal.eventDate},
+          ${signal.sourceUrl}, ${sql.json(signal.ingredients)},
+          ${signal.applicant ?? ""}, ${signal.status ?? ""},
+          ${sql.json(signal.raw ?? {})}
+        )
+        on conflict (source, external_id, signal_type) do update set
+          title = excluded.title,
+          summary = excluded.summary,
+          event_date = excluded.event_date,
+          source_url = excluded.source_url,
+          ingredients = excluded.ingredients,
+          applicant = excluded.applicant,
+          status = excluded.status,
+          raw = excluded.raw,
+          updated_at = now()
+        returning (xmax = 0) as inserted
+      `;
+      if (result[0]?.inserted) inserted++;
+      else updated++;
+    }
+
+    await sql`
+      update regulatory_sync_runs
+      set completed_at = now(), signal_count = ${signals.length}, status = 'success'
+      where id = ${run.id}
+    `;
+    return { database: true, inserted, updated };
+  } catch (error) {
+    await sql`
+      update regulatory_sync_runs
+      set completed_at = now(), status = 'failed', error = ${error instanceof Error ? error.message : String(error)}
+      where id = ${run.id}
+    `;
+    throw error;
+  }
+}
+
+export async function getKnownIngredients() {
+  const sql = getDb();
+  if (!sql) return [];
+  await ensureSchema();
+  const rows = await sql`
+    select distinct ingredient
+    from acvm_products,
+      lateral jsonb_array_elements_text(active_ingredients) ingredient
+    where ingredient <> ''
+    order by ingredient
+  `;
+  return rows.map((row: any) => String(row.ingredient));
+}
+
+export async function getEarlyWarningSignals(limit = 100) {
+  const sql = getDb();
+  if (!sql) return [];
+  await ensureSchema();
+
+  return sql`
+    with enriched as (
+      select
+        s.*,
+        coalesce((
+          select count(*)::int
+          from acvm_products p
+          where p.is_current
+            and exists (
+              select 1
+              from jsonb_array_elements_text(s.ingredients) si(value)
+              where p.active_ingredients ? si.value
+            )
+        ), 0) as matching_products,
+        coalesce((
+          select count(distinct p.registrant)::int
+          from acvm_products p
+          where p.is_current
+            and exists (
+              select 1
+              from jsonb_array_elements_text(s.ingredients) si(value)
+              where p.active_ingredients ? si.value
+            )
+        ), 0) as matching_registrants,
+        coalesce((
+          select count(*)::int
+          from regulatory_signals s2
+          where s2.id <> s.id
+            and s2.event_date >= coalesce(s.event_date, current_date) - interval '180 days'
+            and s2.event_date <= coalesce(s.event_date, current_date) + interval '180 days'
+            and exists (
+              select 1
+              from jsonb_array_elements_text(s.ingredients) a(value)
+              where s2.ingredients ? a.value
+            )
+        ), 0) as related_signals
+      from regulatory_signals s
+    )
+    select *,
+      least(100,
+        case
+          when source = 'MPI_MRL' then 72
+          when source = 'EPA_HSNO' then 62
+          else 50
+        end
+        + case when matching_products = 0 and jsonb_array_length(ingredients) > 0 then 15
+               when matching_products between 1 and 3 then 10
+               when matching_products between 4 and 10 then 5
+               else 0 end
+        + case when related_signals >= 2 then 10
+               when related_signals = 1 then 5
+               else 0 end
+      )::int as signal_score
+    from enriched
+    order by event_date desc nulls last, first_seen_at desc
+    limit ${limit}
+  `;
+}
+
+export async function getEarlyWarningStats() {
+  const sql = getDb();
+  if (!sql) return null;
+  await ensureSchema();
+  const [stats] = await sql`
+    select
+      count(*)::int as signals,
+      count(*) filter (where source = 'EPA_HSNO')::int as epa,
+      count(*) filter (where source = 'MPI_MRL')::int as mrl,
+      count(*) filter (where event_date >= current_date - interval '90 days')::int as recent
+    from regulatory_signals
+  `;
+  const [lastRun] = await sql`
+    select completed_at::text, source, signal_count, status
+    from regulatory_sync_runs
+    order by id desc
+    limit 1
+  `;
+  return { ...stats, lastRun: lastRun ?? null };
+}
+
+export async function getEarlyWarningForIngredient(name: string, limit = 30) {
+  const sql = getDb();
+  if (!sql) return [];
+  await ensureSchema();
+  return sql`
+    select *
+    from regulatory_signals
+    where ingredients ? ${name}
+    order by event_date desc nulls last, first_seen_at desc
     limit ${limit}
   `;
 }
