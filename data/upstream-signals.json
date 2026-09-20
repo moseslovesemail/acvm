@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-09-20T10:54:28.689Z",
+  "capturedAt": "2026-09-20T10:58:04.819Z",
   "sources": {
     "EPA_HSNO": {
       "status": "ok",
@@ -7,7 +7,7 @@
     },
     "MPI_MRL": {
       "status": "ok",
-      "count": 7
+      "count": 8
     }
   },
   "signals": [
@@ -17,7 +17,7 @@
       "signalType": "EPA_PIPELINE",
       "title": "Paste bait containing norbormide",
       "summary": "Applicant: Invasive pest control. Status: Formally received. Next step: Draft risk assessment.",
-      "eventDate": null,
+      "eventDate": "2020-07-24",
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "Invasive pest control",
@@ -38,7 +38,7 @@
       "signalType": "EPA_PIPELINE",
       "title": "Selektope (medetomidine)",
       "summary": "Applicant: i-Tech AB. Status: Formally received. Next step: Public consultation.",
-      "eventDate": null,
+      "eventDate": "2022-04-13",
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "i-Tech AB",
@@ -59,7 +59,7 @@
       "signalType": "EPA_PIPELINE",
       "title": "GF-3301",
       "summary": "Applicant: Corteva Agriscience New Zealand Limited. Status: Formally received. Next step: Public consultation.",
-      "eventDate": null,
+      "eventDate": "2022-06-09",
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "Corteva Agriscience New Zealand Limited",
@@ -80,7 +80,7 @@
       "signalType": "EPA_PIPELINE",
       "title": "Plenexos Care",
       "summary": "Applicant: Bayer New Zealand Limited. Status: Formally received. Next step: Public consultation.",
-      "eventDate": null,
+      "eventDate": "2022-08-03",
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "Bayer New Zealand Limited",
@@ -101,7 +101,7 @@
       "signalType": "EPA_PIPELINE",
       "title": "TNL3887",
       "summary": "Applicant: Arxada New Zealand Limited. Status: Formally received. Next step: Public consultation.",
-      "eventDate": null,
+      "eventDate": "2022-09-15",
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "Arxada New Zealand Limited",
@@ -122,7 +122,7 @@
       "signalType": "EPA_PIPELINE",
       "title": "VERSYS®",
       "summary": "Applicant: BASF New Zealand Limited. Status: Formally received. Next step: Public consultation.",
-      "eventDate": null,
+      "eventDate": "2023-08-24",
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "BASF New Zealand Limited",
@@ -143,7 +143,7 @@
       "signalType": "EPA_PIPELINE",
       "title": "Infinity Ultra",
       "summary": "Applicant: Bayer New Zealand Limited. Status: Formally received. Next step: Public consultation.",
-      "eventDate": null,
+      "eventDate": "2022-04-14",
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "Bayer New Zealand Limited",
@@ -164,7 +164,7 @@
       "signalType": "EPA_PIPELINE",
       "title": "ProTone",
       "summary": "Applicant: Valent BioSciences LLC. Status: Formally received. Next step: Consideration.",
-      "eventDate": null,
+      "eventDate": "2023-10-02",
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "Valent BioSciences LLC",
@@ -291,6 +291,23 @@
       "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026",
       "ingredients": [
         "pendimethalin"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026:sugar beet extract",
+      "signalType": "MRL_ACTIVITY",
+      "title": "sugar beet extract",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026: regulatory activity identified for sugar beet extract.",
+      "eventDate": "2026-04-13",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026",
+      "ingredients": [
+        "sugar beet extract"
       ],
       "status": "Consultation",
       "raw": {
