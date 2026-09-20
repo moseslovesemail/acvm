@@ -1,0 +1,45 @@
+name: Capture upstream regulatory signals
+
+on:
+  schedule:
+    - cron: "30 18 * * *"
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/workflows/upstream-snapshot.yml"
+      - "scripts/snapshot-upstream.ts"
+      - "lib/early-warning.ts"
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Capture EPA and MPI public signals
+        run: npm run snapshot-upstream
+
+      - name: Commit snapshot
+        run: |
+          if git diff --quiet -- data/upstream-signals.json; then
+            echo "No snapshot changes."
+            exit 0
+          fi
+          git config user.name "ACVM Signal Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/upstream-signals.json
+          git commit -m "Update upstream regulatory snapshot"
+          git push
