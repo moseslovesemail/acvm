@@ -715,6 +715,18 @@ export async function upsertRegulatorySignals(source: string, signals: Regulator
       else updated++;
     }
 
+    if (source === "MPI_MRL") {
+      await sql`
+        delete from regulatory_signals older
+        using regulatory_signals newer
+        where older.source = 'MPI_MRL'
+          and newer.source = 'MPI_MRL'
+          and lower(older.title) = lower(newer.title)
+          and coalesce(older.event_date, date '1900-01-01') = coalesce(newer.event_date, date '1900-01-01')
+          and older.id < newer.id
+      `;
+    }
+
     await sql`
       update regulatory_sync_runs
       set completed_at = now(), signal_count = ${signals.length}, status = 'success'
