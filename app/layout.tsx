@@ -20,6 +20,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             <nav className="navlinks">
               <a href="/#product">Intelligence</a>
               <a href="/products">Products</a>
+              <a href="/early-warning">Early Warning</a>
               <a href="/cancellations">Market exits</a>
               {user ? <a href="/watchlist">Watchlist</a> : <a href="/#pricing">Plans</a>}
               {user ? (
