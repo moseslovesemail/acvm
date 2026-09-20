@@ -792,7 +792,7 @@ export async function getEarlyWarningSignals(limit = 100) {
       least(100,
         case
           when source = 'MPI_MRL' then 72
-          when source = 'EPA_HSNO' then 62
+          when source = 'EPA_HSNO' then 78
           else 50
         end
         + case when matching_products = 0 and jsonb_array_length(ingredients) > 0 then 15
@@ -804,7 +804,7 @@ export async function getEarlyWarningSignals(limit = 100) {
                else 0 end
       )::int as signal_score
     from enriched
-    order by event_date desc nulls last, first_seen_at desc
+    order by signal_score desc, first_seen_at desc, event_date desc nulls last
     limit ${limit}
   `;
 }
@@ -818,7 +818,7 @@ export async function getEarlyWarningStats() {
       count(*)::int as signals,
       count(*) filter (where source = 'EPA_HSNO')::int as epa,
       count(*) filter (where source = 'MPI_MRL')::int as mrl,
-      count(*) filter (where event_date >= current_date - interval '90 days')::int as recent
+      count(*) filter (where first_seen_at >= now() - interval '90 days')::int as recent
     from regulatory_signals
   `;
   const [lastRun] = await sql`
