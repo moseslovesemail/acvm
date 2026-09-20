@@ -596,27 +596,67 @@ export async function getWatchlistEvents(userId: number, limit = 100) {
   const sql = getDb();
   if (!sql) return [];
   await ensureSchema();
+
   return sql`
-    select distinct e.*, w.entity_type, w.entity_value, w.label as watch_label
-    from acvm_watchlists w
-    join acvm_events e on (
-      (w.entity_type = 'product' and e.registration_number = w.entity_value)
-      or (w.entity_type = 'registrant' and e.registrant = w.entity_value)
-      or (
-        w.entity_type = 'ingredient'
-        and exists (
-          select 1 from acvm_products p
-          where p.registration_number = e.registration_number
-            and p.active_ingredients ? w.entity_value
+    with matches as (
+      select distinct
+        e.id::text as id,
+        e.event_type,
+        e.registration_number,
+        e.trade_name,
+        e.registrant,
+        e.detected_at,
+        e.summary,
+        e.payload,
+        w.entity_type,
+        w.entity_value,
+        w.label as watch_label,
+        'ACVM'::text as source_family,
+        null::text as source_url
+      from acvm_watchlists w
+      join acvm_events e on (
+        (w.entity_type = 'product' and e.registration_number = w.entity_value)
+        or (w.entity_type = 'registrant' and e.registrant = w.entity_value)
+        or (
+          w.entity_type = 'ingredient'
+          and exists (
+            select 1 from acvm_products p
+            where p.registration_number = e.registration_number
+              and p.active_ingredients ? w.entity_value
+          )
         )
       )
+      where w.user_id = ${userId}
+
+      union all
+
+      select distinct
+        ('reg-' || r.id)::text as id,
+        r.signal_type as event_type,
+        ''::text as registration_number,
+        r.title as trade_name,
+        r.applicant as registrant,
+        coalesce(r.event_date::timestamptz, r.first_seen_at) as detected_at,
+        r.summary,
+        r.raw as payload,
+        w.entity_type,
+        w.entity_value,
+        w.label as watch_label,
+        r.source as source_family,
+        r.source_url
+      from acvm_watchlists w
+      join regulatory_signals r on (
+        w.entity_type = 'ingredient'
+        and r.ingredients ? w.entity_value
+      )
+      where w.user_id = ${userId}
     )
-    where w.user_id = ${userId}
-    order by e.detected_at desc
+    select *
+    from matches
+    order by detected_at desc
     limit ${limit}
   `;
 }
-
 
 export type RegulatorySignalInput = {
   source: "EPA_HSNO" | "MPI_MRL";
