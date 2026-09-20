@@ -18,9 +18,12 @@ export default async function Watchlist({ searchParams }: { searchParams: Promis
         <div>
           <div className="eyebrow">Your intelligence</div>
           <h2 style={{marginTop:8}}>Watchlist</h2>
-          <p className="lead">Follow products, registrants and active ingredients. Matching regulatory signals collect here automatically.</p>
+          <p className="lead">Follow products, registrants and active ingredients. ACVM changes and upstream EPA/MRL activity collect here automatically.</p>
         </div>
-        <a className="button secondary" href="/products">Find products</a>
+        <div className="dash-actions">
+          <a className="button signal" href="/early-warning">Early Warning</a>
+          <a className="button secondary" href="/products">Find products</a>
+        </div>
       </div>
 
       {params.error === "limit" && <div className="form-error">Your current plan allows {limit} watchlist items. Upgrade to monitor more entities.</div>}
@@ -52,20 +55,27 @@ export default async function Watchlist({ searchParams }: { searchParams: Promis
       </section>
 
       <section className="workspace-section">
-        <div className="workspace-heading"><h3>Signals matching your watchlist</h3><span>Newest first.</span></div>
+        <div className="workspace-heading"><h3>Signals matching your watchlist</h3><span>ACVM and upstream regulatory activity, newest first.</span></div>
         <div className="table-wrap">
           <table>
-            <thead><tr><th>Signal</th><th>Matched watch</th><th>Product</th><th>Registrant</th><th>Detected</th></tr></thead>
+            <thead><tr><th>Signal</th><th>Matched watch</th><th>Product / activity</th><th>Registrant / applicant</th><th>Detected</th></tr></thead>
             <tbody>
-              {events.map((event: any) => (
-                <tr key={[event.id,event.entity_type,event.entity_value].join("-")}>
-                  <td><span className="badge">{String(event.event_type).replaceAll("_"," ")}</span></td>
-                  <td><strong>{event.watch_label || event.entity_value}</strong><br/><span className="source-note">{event.entity_type}</span></td>
-                  <td><a className="table-link" href={"/products/" + encodeURIComponent(event.registration_number)}>{event.trade_name || event.registration_number}</a><br/><span className="source-note">{event.summary}</span></td>
-                  <td>{event.registrant}</td>
-                  <td>{new Date(event.detected_at).toLocaleDateString("en-NZ")}</td>
-                </tr>
-              ))}
+              {events.map((event: any) => {
+                const upstream = event.source_family !== "ACVM";
+                const href = upstream ? "/early-warning" : "/products/" + encodeURIComponent(event.registration_number);
+                return (
+                  <tr key={[event.id,event.entity_type,event.entity_value].join("-")}>
+                    <td>
+                      <span className="badge">{String(event.event_type).replaceAll("_"," ")}</span><br/>
+                      <span className="source-note">{event.source_family}</span>
+                    </td>
+                    <td><strong>{event.watch_label || event.entity_value}</strong><br/><span className="source-note">{event.entity_type}</span></td>
+                    <td><a className="table-link" href={href}>{event.trade_name || event.registration_number || "Regulatory activity"}</a><br/><span className="source-note">{event.summary}</span></td>
+                    <td>{event.registrant || "—"}</td>
+                    <td>{new Date(event.detected_at).toLocaleDateString("en-NZ")}</td>
+                  </tr>
+                );
+              })}
               {!events.length && <tr><td colSpan={5} className="source-note">No matching regulatory events yet. Your watchlist is active.</td></tr>}
             </tbody>
           </table>
