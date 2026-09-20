@@ -1,4 +1,5 @@
 name: Capture upstream regulatory signals
+# Validated against a retained snapshot so source failures fail safe.
 
 on:
   schedule:
