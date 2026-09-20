@@ -5,7 +5,7 @@ let client: Sql | null = null;
 
 export function getDb(): Sql | null {
   if (!process.env.DATABASE_URL) return null;
-  if (!client) client = postgres(process.env.DATABASE_URL, { max: 8 });
+  if (!client) client = postgres(process.env.DATABASE_URL, { max: 8, onnotice: () => {} });
   return client;
 }
 
