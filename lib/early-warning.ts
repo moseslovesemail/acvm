@@ -227,7 +227,9 @@ export async function fetchMpiMrlSignals(knownIngredients: string[]): Promise<Re
 
   const deduped = new Map<string, RegulatorySignalInput>();
   for (const signal of signals) deduped.set(signal.externalId, signal);
-  return [...deduped.values()];
+  const values = [...deduped.values()];
+  if (!values.length) throw new Error("MPI MRL source produced no structured consultation signals");
+  return values;
 }
 
 export async function fetchEarlyWarningSignals(knownIngredients: string[]) {
