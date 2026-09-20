@@ -685,6 +685,7 @@ export async function upsertRegulatorySignals(source: string, signals: Regulator
 
   let inserted = 0;
   let updated = 0;
+  let deduplicated = 0;
 
   try {
     for (const signal of signals) {
@@ -716,7 +717,7 @@ export async function upsertRegulatorySignals(source: string, signals: Regulator
     }
 
     if (source === "MPI_MRL") {
-      await sql`
+      const removed = await sql`
         delete from regulatory_signals older
         using regulatory_signals newer
         where older.source = 'MPI_MRL'
@@ -724,7 +725,9 @@ export async function upsertRegulatorySignals(source: string, signals: Regulator
           and lower(older.title) = lower(newer.title)
           and coalesce(older.event_date, date '1900-01-01') = coalesce(newer.event_date, date '1900-01-01')
           and older.id < newer.id
+        returning older.id
       `;
+      deduplicated = removed.length;
     }
 
     await sql`
@@ -732,7 +735,7 @@ export async function upsertRegulatorySignals(source: string, signals: Regulator
       set completed_at = now(), signal_count = ${signals.length}, status = 'success'
       where id = ${run.id}
     `;
-    return { database: true, inserted, updated };
+    return { database: true, inserted, updated, deduplicated };
   } catch (error) {
     await sql`
       update regulatory_sync_runs
