@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getIngredientProfile } from "@/lib/db";
+import { getIngredientProfile, getEarlyWarningForIngredient } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -9,6 +9,7 @@ export default async function IngredientProfile({ params }: { params: Promise<{ 
   const name = decodeURIComponent(slug);
   const data = await getIngredientProfile(name);
   if (!data) notFound();
+  const upstream = await getEarlyWarningForIngredient(name, 30);
   const user = await getCurrentUser();
   const current = data.products.filter((p: any) => p.is_current);
 
@@ -25,8 +26,23 @@ export default async function IngredientProfile({ params }: { params: Promise<{ 
       <div className="profile-grid">
         <section className="profile-card"><span className="stat-label">Current products</span><strong>{current.length}</strong></section>
         <section className="profile-card"><span className="stat-label">Registrants</span><strong>{data.registrants.length}</strong></section>
-        <section className="profile-card"><span className="stat-label">Recorded signals</span><strong>{data.events.length}</strong></section>
+        <section className="profile-card"><span className="stat-label">Upstream signals</span><strong>{upstream.length}</strong></section>
       </div>
+
+      {upstream.length > 0 && <section className="workspace-section">
+        <div className="workspace-heading"><h3>Upstream regulatory activity</h3><span>EPA and MPI activity connected to this ingredient.</span></div>
+        <div className="timeline-list">
+          {upstream.map((signal: any) => <article className="timeline-item" key={signal.id}>
+            <div className="timeline-date">{signal.event_date ? new Date(signal.event_date + "T00:00:00").toLocaleDateString("en-NZ") : "—"}</div>
+            <div>
+              <div className="warning-overline"><span className="badge">{signal.source === "EPA_HSNO" ? "EPA HSNO" : "MPI MRL"}</span><span>{signal.status}</span></div>
+              <strong>{signal.title}</strong>
+              <p>{signal.summary}</p>
+            </div>
+            <a className="text-button" href={signal.source_url} target="_blank" rel="noreferrer">Source ↗</a>
+          </article>)}
+        </div>
+      </section>}
 
       <section className="workspace-section">
         <div className="workspace-heading"><h3>Competitive set</h3><span>Registrant share by current product count.</span></div>
