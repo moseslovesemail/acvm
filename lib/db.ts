@@ -787,7 +787,13 @@ export async function getEarlyWarningStats() {
     order by id desc
     limit 1
   `;
-  return { ...stats, lastRun: lastRun ?? null };
+  return {
+    signals: Number(stats?.signals ?? 0),
+    epa: Number(stats?.epa ?? 0),
+    mrl: Number(stats?.mrl ?? 0),
+    recent: Number(stats?.recent ?? 0),
+    lastRun: lastRun ?? null
+  };
 }
 
 export async function getEarlyWarningForIngredient(name: string, limit = 30) {
