@@ -1,13 +1,16 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import BrandMark from "@/components/BrandMark";
+import { getCurrentUser } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "ACVM Signal — Agricultural Product Regulatory Intelligence",
   description: "Track registrations, cancellations, status changes and competitive movement in New Zealand's ACVM market."
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const user = await getCurrentUser();
+
   return (
     <html lang="en-NZ">
       <body>
@@ -17,8 +20,13 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <nav className="navlinks">
               <a href="/#product">Intelligence</a>
               <a href="/products">Products</a>
-              <a href="/#pricing">Plans</a>
-              <a href="/dashboard" className="button nav-button">Open dashboard</a>
+              <a href="/cancellations">Market exits</a>
+              {user ? <a href="/watchlist">Watchlist</a> : <a href="/#pricing">Plans</a>}
+              {user ? (
+                <a href="/account" className="button nav-button">Account</a>
+              ) : (
+                <a href="/login" className="button nav-button">Sign in</a>
+              )}
             </nav>
           </div>
         </header>
