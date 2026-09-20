@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-09-20T10:58:04.819Z",
+  "capturedAt": "2026-09-20T20:59:13.885Z",
   "sources": {
     "EPA_HSNO": {
       "status": "ok",
@@ -315,6 +315,5 @@
         "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
       }
     }
-  ],
-  "ingestRequestedAt": "2026-09-20T11:04:04.907Z"
+  ]
 }
