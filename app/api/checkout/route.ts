@@ -12,7 +12,11 @@ export async function POST(request: NextRequest) {
   const user = await getCurrentUser();
   if (!user) return NextResponse.redirect(new URL("/login", request.url), 303);
 
-  if (["active", "trialing"].includes(String(user.subscription_status))) {\n    return NextResponse.redirect(new URL("/account?billing=already-active", request.url), 303);\n  }\n\n  const form = await request.formData();
+  if (["active", "trialing"].includes(String(user.subscription_status))) {
+    return NextResponse.redirect(new URL("/account?billing=already-active", request.url), 303);
+  }
+
+  const form = await request.formData();
   const plan = String(form.get("plan") ?? "");
   const price = priceMap[plan];
   const secret = process.env.STRIPE_SECRET_KEY;
