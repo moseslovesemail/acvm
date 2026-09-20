@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-09-20T10:50:10.211Z",
+  "capturedAt": "2026-09-20T10:54:28.689Z",
   "sources": {
     "EPA_HSNO": {
       "status": "ok",
@@ -7,7 +7,7 @@
     },
     "MPI_MRL": {
       "status": "ok",
-      "count": 8
+      "count": 7
     }
   },
   "signals": [
@@ -17,22 +17,19 @@
       "signalType": "EPA_PIPELINE",
       "title": "Paste bait containing norbormide",
       "summary": "Applicant: Invasive pest control. Status: Formally received. Next step: Draft risk assessment.",
-      "eventDate": "2020-07-24",
+      "eventDate": null,
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
-      "ingredients": [
-        "norbormide"
-      ],
+      "ingredients": [],
       "applicant": "Invasive pest control",
       "status": "Formally received · Draft risk assessment",
       "raw": {
         "applicationId": "APP204095",
         "shortName": "Paste bait containing norbormide",
         "applicant": "Invasive pest control",
-        "lodged": "2020-07-24",
+        "lodged": "24/07/2020",
         "status": "Formally received",
         "nextStep": "Draft risk assessment",
-        "sourceType": "Category C current pipeline",
-        "seededFromOfficialSource": true
+        "sourceType": "Category C current pipeline"
       }
     },
     {
@@ -41,22 +38,19 @@
       "signalType": "EPA_PIPELINE",
       "title": "Selektope (medetomidine)",
       "summary": "Applicant: i-Tech AB. Status: Formally received. Next step: Public consultation.",
-      "eventDate": "2022-04-13",
+      "eventDate": null,
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
-      "ingredients": [
-        "medetomidine"
-      ],
+      "ingredients": [],
       "applicant": "i-Tech AB",
       "status": "Formally received · Public consultation",
       "raw": {
         "applicationId": "APP204449",
         "shortName": "Selektope (medetomidine)",
         "applicant": "i-Tech AB",
-        "lodged": "2022-04-13",
+        "lodged": "13/04/2022",
         "status": "Formally received",
         "nextStep": "Public consultation",
-        "sourceType": "Category C current pipeline",
-        "seededFromOfficialSource": true
+        "sourceType": "Category C current pipeline"
       }
     },
     {
@@ -65,7 +59,7 @@
       "signalType": "EPA_PIPELINE",
       "title": "GF-3301",
       "summary": "Applicant: Corteva Agriscience New Zealand Limited. Status: Formally received. Next step: Public consultation.",
-      "eventDate": "2022-06-09",
+      "eventDate": null,
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "Corteva Agriscience New Zealand Limited",
@@ -74,11 +68,10 @@
         "applicationId": "APP204485",
         "shortName": "GF-3301",
         "applicant": "Corteva Agriscience New Zealand Limited",
-        "lodged": "2022-06-09",
+        "lodged": "09/06/2022",
         "status": "Formally received",
         "nextStep": "Public consultation",
-        "sourceType": "Category C current pipeline",
-        "seededFromOfficialSource": true
+        "sourceType": "Category C current pipeline"
       }
     },
     {
@@ -87,7 +80,7 @@
       "signalType": "EPA_PIPELINE",
       "title": "Plenexos Care",
       "summary": "Applicant: Bayer New Zealand Limited. Status: Formally received. Next step: Public consultation.",
-      "eventDate": "2022-08-03",
+      "eventDate": null,
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "Bayer New Zealand Limited",
@@ -96,11 +89,10 @@
         "applicationId": "APP204525",
         "shortName": "Plenexos Care",
         "applicant": "Bayer New Zealand Limited",
-        "lodged": "2022-08-03",
+        "lodged": "03/08/2022",
         "status": "Formally received",
         "nextStep": "Public consultation",
-        "sourceType": "Category C current pipeline",
-        "seededFromOfficialSource": true
+        "sourceType": "Category C current pipeline"
       }
     },
     {
@@ -109,7 +101,7 @@
       "signalType": "EPA_PIPELINE",
       "title": "TNL3887",
       "summary": "Applicant: Arxada New Zealand Limited. Status: Formally received. Next step: Public consultation.",
-      "eventDate": "2022-09-15",
+      "eventDate": null,
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "Arxada New Zealand Limited",
@@ -118,11 +110,10 @@
         "applicationId": "APP204548",
         "shortName": "TNL3887",
         "applicant": "Arxada New Zealand Limited",
-        "lodged": "2022-09-15",
+        "lodged": "15/09/2022",
         "status": "Formally received",
         "nextStep": "Public consultation",
-        "sourceType": "Category C current pipeline",
-        "seededFromOfficialSource": true
+        "sourceType": "Category C current pipeline"
       }
     },
     {
@@ -131,7 +122,7 @@
       "signalType": "EPA_PIPELINE",
       "title": "VERSYS®",
       "summary": "Applicant: BASF New Zealand Limited. Status: Formally received. Next step: Public consultation.",
-      "eventDate": "2023-08-24",
+      "eventDate": null,
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "BASF New Zealand Limited",
@@ -140,11 +131,10 @@
         "applicationId": "APP204705",
         "shortName": "VERSYS®",
         "applicant": "BASF New Zealand Limited",
-        "lodged": "2023-08-24",
+        "lodged": "24/08/2023",
         "status": "Formally received",
         "nextStep": "Public consultation",
-        "sourceType": "Category C current pipeline",
-        "seededFromOfficialSource": true
+        "sourceType": "Category C current pipeline"
       }
     },
     {
@@ -153,7 +143,7 @@
       "signalType": "EPA_PIPELINE",
       "title": "Infinity Ultra",
       "summary": "Applicant: Bayer New Zealand Limited. Status: Formally received. Next step: Public consultation.",
-      "eventDate": "2022-04-14",
+      "eventDate": null,
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "Bayer New Zealand Limited",
@@ -162,11 +152,10 @@
         "applicationId": "APP204452",
         "shortName": "Infinity Ultra",
         "applicant": "Bayer New Zealand Limited",
-        "lodged": "2022-04-14",
+        "lodged": "14/04/2022",
         "status": "Formally received",
         "nextStep": "Public consultation",
-        "sourceType": "Category C current pipeline",
-        "seededFromOfficialSource": true
+        "sourceType": "Category C current pipeline"
       }
     },
     {
@@ -175,7 +164,7 @@
       "signalType": "EPA_PIPELINE",
       "title": "ProTone",
       "summary": "Applicant: Valent BioSciences LLC. Status: Formally received. Next step: Consideration.",
-      "eventDate": "2023-10-02",
+      "eventDate": null,
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "Valent BioSciences LLC",
@@ -184,179 +173,129 @@
         "applicationId": "APP204726",
         "shortName": "ProTone",
         "applicant": "Valent BioSciences LLC",
-        "lodged": "2023-10-02",
+        "lodged": "2/10/2023",
         "status": "Formally received",
         "nextStep": "Consideration",
-        "sourceType": "Category C current pipeline",
-        "seededFromOfficialSource": true
+        "sourceType": "Category C current pipeline"
       }
     },
     {
       "source": "MPI_MRL",
-      "externalId": "april-2026:cefuroxime",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026:cefuroxime",
       "signalType": "MRL_ACTIVITY",
       "title": "cefuroxime",
-      "summary": "April 2026 MPI MRL consultation: Schedule 1 proposed new entry for cefuroxime. Consultation opened 13 April 2026 and closed 12 June 2026.",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026: regulatory activity identified for cefuroxime.",
       "eventDate": "2026-04-13",
       "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026",
       "ingredients": [
         "cefuroxime"
       ],
-      "applicant": "",
-      "status": "Consultation closed",
+      "status": "Consultation",
       "raw": {
         "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026",
-        "proposal": "Schedule 1 proposed new entry",
-        "opened": "2026-04-13",
-        "closed": "2026-06-12",
-        "seededFromOfficialSource": true
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
       }
     },
     {
       "source": "MPI_MRL",
-      "externalId": "april-2026:chlorotoluron",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026:chlorotoluron",
       "signalType": "MRL_ACTIVITY",
       "title": "chlorotoluron",
-      "summary": "April 2026 MPI MRL consultation: Schedule 1 proposed new entry for chlorotoluron. Consultation opened 13 April 2026 and closed 12 June 2026.",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026: regulatory activity identified for chlorotoluron.",
       "eventDate": "2026-04-13",
       "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026",
       "ingredients": [
         "chlorotoluron"
       ],
-      "applicant": "",
-      "status": "Consultation closed",
+      "status": "Consultation",
       "raw": {
         "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026",
-        "proposal": "Schedule 1 proposed new entry",
-        "opened": "2026-04-13",
-        "closed": "2026-06-12",
-        "seededFromOfficialSource": true
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
       }
     },
     {
       "source": "MPI_MRL",
-      "externalId": "april-2026:enrofloxacin",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026:enrofloxacin",
       "signalType": "MRL_ACTIVITY",
       "title": "enrofloxacin",
-      "summary": "April 2026 MPI MRL consultation: Schedule 1 proposed new entry for enrofloxacin. Consultation opened 13 April 2026 and closed 12 June 2026.",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026: regulatory activity identified for enrofloxacin.",
       "eventDate": "2026-04-13",
       "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026",
       "ingredients": [
         "enrofloxacin"
       ],
-      "applicant": "",
-      "status": "Consultation closed",
+      "status": "Consultation",
       "raw": {
         "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026",
-        "proposal": "Schedule 1 proposed new entry",
-        "opened": "2026-04-13",
-        "closed": "2026-06-12",
-        "seededFromOfficialSource": true
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
       }
     },
     {
       "source": "MPI_MRL",
-      "externalId": "april-2026:2-phenylphenol",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026:2-phenylphenol",
       "signalType": "MRL_ACTIVITY",
       "title": "2-phenylphenol",
-      "summary": "April 2026 MPI MRL consultation: Schedule 1 proposed new entry for 2-phenylphenol. Consultation opened 13 April 2026 and closed 12 June 2026.",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026: regulatory activity identified for 2-phenylphenol.",
       "eventDate": "2026-04-13",
       "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026",
       "ingredients": [
         "2-phenylphenol"
       ],
-      "applicant": "",
-      "status": "Consultation closed",
+      "status": "Consultation",
       "raw": {
         "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026",
-        "proposal": "Schedule 1 proposed new entry",
-        "opened": "2026-04-13",
-        "closed": "2026-06-12",
-        "seededFromOfficialSource": true
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
       }
     },
     {
       "source": "MPI_MRL",
-      "externalId": "april-2026:marbofloxacin",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026:marbofloxacin",
       "signalType": "MRL_ACTIVITY",
       "title": "marbofloxacin",
-      "summary": "April 2026 MPI MRL consultation: Schedule 1 proposed amendment for marbofloxacin. Consultation opened 13 April 2026 and closed 12 June 2026.",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026: regulatory activity identified for marbofloxacin.",
       "eventDate": "2026-04-13",
       "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026",
       "ingredients": [
         "marbofloxacin"
       ],
-      "applicant": "",
-      "status": "Consultation closed",
+      "status": "Consultation",
       "raw": {
         "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026",
-        "proposal": "Schedule 1 proposed amendment",
-        "opened": "2026-04-13",
-        "closed": "2026-06-12",
-        "seededFromOfficialSource": true
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
       }
     },
     {
       "source": "MPI_MRL",
-      "externalId": "april-2026:nicarbazin",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026:nicarbazin",
       "signalType": "MRL_ACTIVITY",
       "title": "nicarbazin",
-      "summary": "April 2026 MPI MRL consultation: Schedule 1 proposed amendment for nicarbazin. Consultation opened 13 April 2026 and closed 12 June 2026.",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026: regulatory activity identified for nicarbazin.",
       "eventDate": "2026-04-13",
       "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026",
       "ingredients": [
         "nicarbazin"
       ],
-      "applicant": "",
-      "status": "Consultation closed",
+      "status": "Consultation",
       "raw": {
         "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026",
-        "proposal": "Schedule 1 proposed amendment",
-        "opened": "2026-04-13",
-        "closed": "2026-06-12",
-        "seededFromOfficialSource": true
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
       }
     },
     {
       "source": "MPI_MRL",
-      "externalId": "april-2026:pendimethalin",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026:pendimethalin",
       "signalType": "MRL_ACTIVITY",
       "title": "pendimethalin",
-      "summary": "April 2026 MPI MRL consultation: Schedule 1 proposed amendment for pendimethalin. Consultation opened 13 April 2026 and closed 12 June 2026.",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026: regulatory activity identified for pendimethalin.",
       "eventDate": "2026-04-13",
       "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026",
       "ingredients": [
         "pendimethalin"
       ],
-      "applicant": "",
-      "status": "Consultation closed",
+      "status": "Consultation",
       "raw": {
         "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026",
-        "proposal": "Schedule 1 proposed amendment",
-        "opened": "2026-04-13",
-        "closed": "2026-06-12",
-        "seededFromOfficialSource": true
-      }
-    },
-    {
-      "source": "MPI_MRL",
-      "externalId": "april-2026:sugar beet extract",
-      "signalType": "MRL_ACTIVITY",
-      "title": "sugar beet extract",
-      "summary": "April 2026 MPI MRL consultation: Schedule 2 proposed new entry for sugar beet extract. Consultation opened 13 April 2026 and closed 12 June 2026.",
-      "eventDate": "2026-04-13",
-      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-april-2026",
-      "ingredients": [
-        "sugar beet extract"
-      ],
-      "applicant": "",
-      "status": "Consultation closed",
-      "raw": {
-        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds – April 2026",
-        "proposal": "Schedule 2 proposed new entry",
-        "opened": "2026-04-13",
-        "closed": "2026-06-12",
-        "seededFromOfficialSource": true
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
       }
     }
   ]
