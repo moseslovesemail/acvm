@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { ensureSchema, getKnownIngredients, upsertRegulatorySignals } from "../lib/db";
+import { ensureSchema, getEarlyWarningStats, getKnownIngredients, upsertRegulatorySignals } from "../lib/db";
 import { fetchEarlyWarningSignals } from "../lib/early-warning";
 import type { RegulatorySignalInput } from "../lib/db";
 
@@ -66,6 +66,7 @@ async function main() {
 
   const epaResult = await upsertRegulatorySignals("EPA_HSNO", epa);
   const mrlResult = await upsertRegulatorySignals("MPI_MRL", mrl);
+  const storedStats = await getEarlyWarningStats();
 
   console.log(JSON.stringify({
     sourceMode,
@@ -73,7 +74,8 @@ async function main() {
     sourceStatus: snapshot?.sources ?? null,
     knownIngredients: knownIngredients.length,
     EPA_HSNO: { fetched: epa.length, ...epaResult },
-    MPI_MRL: { fetched: mrl.length, ...mrlResult }
+    MPI_MRL: { fetched: mrl.length, ...mrlResult },
+    storedStats
   }, null, 2));
 }
 
