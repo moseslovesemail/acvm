@@ -3,7 +3,7 @@ name: Capture upstream regulatory signals
 
 on:
   schedule:
-    - cron: "30 18 * * *"
+    - cron: "17 15 * * *"
   workflow_dispatch:
   push:
     paths:
