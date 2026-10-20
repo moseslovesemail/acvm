@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-19T20:36:42.486Z",
+  "capturedAt": "2026-10-20T19:18:37.416Z",
   "sources": {
     "EPA_HSNO": {
       "status": "ok",
@@ -7,7 +7,7 @@
     },
     "MPI_MRL": {
       "status": "ok",
-      "count": 8
+      "count": 29
     }
   },
   "signals": [
@@ -177,6 +177,363 @@
         "status": "Formally received",
         "nextStep": "Consideration",
         "sourceType": "Category C current pipeline"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:chlorine dioxide",
+      "signalType": "MRL_ACTIVITY",
+      "title": "chlorine dioxide",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for chlorine dioxide.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "chlorine dioxide"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:sedaxane",
+      "signalType": "MRL_ACTIVITY",
+      "title": "sedaxane",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for sedaxane.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "sedaxane"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:spidoxamat",
+      "signalType": "MRL_ACTIVITY",
+      "title": "spidoxamat",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for spidoxamat.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "spidoxamat"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:acetochlor",
+      "signalType": "MRL_ACTIVITY",
+      "title": "acetochlor",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for acetochlor.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "acetochlor"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:clomazone",
+      "signalType": "MRL_ACTIVITY",
+      "title": "clomazone",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for clomazone.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "clomazone"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:cyntraniliprole",
+      "signalType": "MRL_ACTIVITY",
+      "title": "cyntraniliprole",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for cyntraniliprole.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "cyntraniliprole"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:flufenacet",
+      "signalType": "MRL_ACTIVITY",
+      "title": "flufenacet",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for flufenacet.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "flufenacet"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:fluxapyroxad",
+      "signalType": "MRL_ACTIVITY",
+      "title": "fluxapyroxad",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for fluxapyroxad.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "fluxapyroxad"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:isofetamid",
+      "signalType": "MRL_ACTIVITY",
+      "title": "isofetamid",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for isofetamid.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "isofetamid"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:mesotrione",
+      "signalType": "MRL_ACTIVITY",
+      "title": "mesotrione",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for mesotrione.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "mesotrione"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:azoxystrobin",
+      "signalType": "MRL_ACTIVITY",
+      "title": "azoxystrobin",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for azoxystrobin.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "azoxystrobin"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:fenhexamid",
+      "signalType": "MRL_ACTIVITY",
+      "title": "fenhexamid",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for fenhexamid.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "fenhexamid"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:flonicamid",
+      "signalType": "MRL_ACTIVITY",
+      "title": "flonicamid",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for flonicamid.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "flonicamid"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:fluopyram",
+      "signalType": "MRL_ACTIVITY",
+      "title": "fluopyram",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for fluopyram.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "fluopyram"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:flupyradifurone",
+      "signalType": "MRL_ACTIVITY",
+      "title": "flupyradifurone",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for flupyradifurone.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "flupyradifurone"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:lufenuron",
+      "signalType": "MRL_ACTIVITY",
+      "title": "lufenuron",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for lufenuron.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "lufenuron"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:methoxyfenozide",
+      "signalType": "MRL_ACTIVITY",
+      "title": "methoxyfenozide",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for methoxyfenozide.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "methoxyfenozide"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:penthiopyrad",
+      "signalType": "MRL_ACTIVITY",
+      "title": "penthiopyrad",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for penthiopyrad.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "penthiopyrad"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:sulfoxaflor",
+      "signalType": "MRL_ACTIVITY",
+      "title": "sulfoxaflor",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for sulfoxaflor.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "sulfoxaflor"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:nicarbazin",
+      "signalType": "MRL_ACTIVITY",
+      "title": "nicarbazin",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for nicarbazin.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "nicarbazin"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
+      }
+    },
+    {
+      "source": "MPI_MRL",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:pendimethalin",
+      "signalType": "MRL_ACTIVITY",
+      "title": "pendimethalin",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for pendimethalin.",
+      "eventDate": "2026-10-20",
+      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
+      "ingredients": [
+        "pendimethalin"
+      ],
+      "status": "Consultation",
+      "raw": {
+        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
+        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
       }
     },
     {
