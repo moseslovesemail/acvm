@@ -1,13 +1,14 @@
 {
-  "capturedAt": "2026-10-28T20:16:58.477Z",
+  "capturedAt": "2026-10-29T20:21:06.953Z",
   "sources": {
     "EPA_HSNO": {
       "status": "ok",
       "count": 8
     },
     "MPI_MRL": {
-      "status": "ok",
-      "count": 29
+      "status": "stale",
+      "count": 29,
+      "error": "fetch failed"
     }
   },
   "signals": [
