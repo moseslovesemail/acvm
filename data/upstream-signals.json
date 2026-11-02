@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-11-01T19:42:38.306Z",
+  "capturedAt": "2026-11-02T23:07:39.518Z",
   "sources": {
     "EPA_HSNO": {
       "status": "ok",
@@ -7,7 +7,7 @@
     },
     "MPI_MRL": {
       "status": "ok",
-      "count": 29
+      "count": 28
     }
   },
   "signals": [
@@ -504,31 +504,14 @@
     },
     {
       "source": "MPI_MRL",
-      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:nicarbazin",
+      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:spirotetramat",
       "signalType": "MRL_ACTIVITY",
-      "title": "nicarbazin",
-      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for nicarbazin.",
+      "title": "spirotetramat",
+      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for spirotetramat.",
       "eventDate": "2026-10-20",
       "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
       "ingredients": [
-        "nicarbazin"
-      ],
-      "status": "Consultation",
-      "raw": {
-        "consultationTitle": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds",
-        "listingUrl": "https://www.mpi.govt.nz/consultations?cat=9"
-      }
-    },
-    {
-      "source": "MPI_MRL",
-      "externalId": "proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2:pendimethalin",
-      "signalType": "MRL_ACTIVITY",
-      "title": "pendimethalin",
-      "summary": "Proposals to amend the Food Notice: Maximum Residue Levels for Agricultural Compounds: regulatory activity identified for pendimethalin.",
-      "eventDate": "2026-10-20",
-      "sourceUrl": "https://www.mpi.govt.nz/consultations/proposals-to-amend-the-food-notice-maximum-residue-levels-for-agricultural-compounds-2",
-      "ingredients": [
-        "pendimethalin"
+        "spirotetramat"
       ],
       "status": "Consultation",
       "raw": {
