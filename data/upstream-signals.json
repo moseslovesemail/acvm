@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-11-24T23:55:09.089Z",
+  "capturedAt": "2026-11-25T23:39:03.199Z",
   "sources": {
     "EPA_HSNO": {
       "status": "ok",
@@ -37,19 +37,19 @@
       "externalId": "APP204449",
       "signalType": "EPA_PIPELINE",
       "title": "Selektope (medetomidine)",
-      "summary": "Applicant: i-Tech AB. Status: Formally received. Next step: Public consultation.",
+      "summary": "Applicant: i-Tech AB. Status: Formally received. Next step: Hearing or consideration.",
       "eventDate": "2022-04-13",
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "i-Tech AB",
-      "status": "Formally received · Public consultation",
+      "status": "Formally received · Hearing or consideration",
       "raw": {
         "applicationId": "APP204449",
         "shortName": "Selektope (medetomidine)",
         "applicant": "i-Tech AB",
         "lodged": "13/04/2022",
         "status": "Formally received",
-        "nextStep": "Public consultation",
+        "nextStep": "Hearing or consideration",
         "sourceType": "Category C current pipeline"
       }
     },
@@ -121,19 +121,19 @@
       "externalId": "APP204705",
       "signalType": "EPA_PIPELINE",
       "title": "VERSYS®",
-      "summary": "Applicant: BASF New Zealand Limited. Status: Formally received. Next step: Public consultation.",
+      "summary": "Applicant: BASF New Zealand Limited. Status: Formally received. Next step: Consideration.",
       "eventDate": "2023-08-24",
       "sourceUrl": "https://www.epa.govt.nz/hazardous-substances/substance-approvals-and-group-standards/applying-for-a-new-approval/timeframes-to-process-a-new-application/",
       "ingredients": [],
       "applicant": "BASF New Zealand Limited",
-      "status": "Formally received · Public consultation",
+      "status": "Formally received · Consideration",
       "raw": {
         "applicationId": "APP204705",
         "shortName": "VERSYS®",
         "applicant": "BASF New Zealand Limited",
         "lodged": "24/08/2023",
         "status": "Formally received",
-        "nextStep": "Public consultation",
+        "nextStep": "Consideration",
         "sourceType": "Category C current pipeline"
       }
     },
